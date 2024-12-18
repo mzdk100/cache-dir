@@ -1,0 +1,24 @@
+[package]
+name = "cache-dir"
+description = "用于Rust的跨平台获取缓存目录的函数库"
+categories = ["filesystem", "caching"]
+version = "0.1.0"
+edition = "2021"
+keywords = ["cache", "directory", "dir", "ios", "android"]
+license = "MIT"
+repository = "https://github.com/mzdk100/cache-dir.git"
+readme = "README.md"
+
+[workspace]
+members = ["examples/android"]
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+dirs = "5.0.1"
+
+[target.'cfg(target_os = "android")'.dependencies.droid-wrap]
+features = ["android_app", "android_content"]
+version = "0.3.6"
+
+[target.'cfg(target_os="ios")'.dependencies]
+objc2 = "0.5.2"
+objc2-foundation = "0.2.2"
