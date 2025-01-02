@@ -44,3 +44,21 @@ pub(super) fn cache_dir() -> Option<PathBuf> {
         }
     }
 }
+
+pub(super) fn data_dir() -> Option<PathBuf> {
+    unsafe {
+        let ns_file_manager = class!(NSFileManager);
+        let instance: *mut AnyObject = msg_send![ns_file_manager, defaultManager];
+        let directories: *const NSArray<NSObject> = msg_send![instance, URLsForDirectory:AppleDirType::ApplicationSupport inDomains:NS_USER_DOMAIN_MASK];
+        if let Some(obj) = (*directories).firstObject() {
+            let str: *const NSString = msg_send![&obj, path];
+            if str.is_null() {
+                return None;
+            }
+            let copy = (*str).to_string();
+            Some(PathBuf::from(copy))
+        } else {
+            None
+        }
+    }
+}
