@@ -60,7 +60,7 @@ pub fn get_cache_dir() -> Result<PathBuf, NoSuchDirectoryError> {
 
 /// 获取数据目录的函数。
 /// 数据目录是一种可靠的存储目录，可随时读写文件且无需申请权限，与[get_cache_dir]的区别是，此函数获取的数据目录更加持久。
-/// 在安卓平台此目录是APP私有目录中的`files`，Windows上是`%LOCALAPPDATA%\Temp`，其他平台取决于操作系统或者[dirs::data_local_dir]的实现；
+/// 在安卓平台此目录是APP私有目录中的`files`，Windows上是`%LOCALAPPDATA%`，其他平台取决于操作系统或者[dirs::data_local_dir]的实现；
 ///
 /// 尝试获取当前平台的可写的数据目录。如果成功，返回一个包含目录路径的`Ok`值；如果失败，返回一个`Err`值，其中包含[NoSuchDirectoryError]错误。
 /// 平台包括： Windows, Linux, MacOS, Android, iOS, WASM等。
