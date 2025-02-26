@@ -1,9 +1,10 @@
 use objc2::{class, msg_send, runtime::AnyObject};
 use objc2_foundation::{NSArray, NSObject, NSString};
-use std::{ffi::c_ulong, path::PathBuf};
+use std::path::PathBuf;
 
 const NS_USER_DOMAIN_MASK: c_ulong = 1;
 
+#[allow(unused)]
 enum AppleDirType {
     Library,
     User,
@@ -13,7 +14,7 @@ enum AppleDirType {
     Downloads,
 }
 
-impl Into<c_ulong> for AppleDirType {
+impl Into<usize> for AppleDirType {
     fn into(self) -> c_ulong {
         match self {
             Self::Library => 5,
@@ -27,11 +28,13 @@ impl Into<c_ulong> for AppleDirType {
 }
 
 pub(super) fn cache_dir() -> Option<PathBuf> {
+    let cache_dir: usize = AppleDirType::Cache.into();
+
     unsafe {
         let ns_file_manager = class!(NSFileManager);
         let instance: *mut AnyObject = msg_send![ns_file_manager, defaultManager];
         let directories: *const NSArray<NSObject> =
-            msg_send![instance, URLsForDirectory:AppleDirType::Cache inDomains:NS_USER_DOMAIN_MASK];
+            msg_send![instance, URLsForDirectory: cache_dir, inDomains:NS_USER_DOMAIN_MASK];
         if let Some(obj) = (*directories).firstObject() {
             let str: *const NSString = msg_send![&obj, path];
             if str.is_null() {
@@ -46,10 +49,13 @@ pub(super) fn cache_dir() -> Option<PathBuf> {
 }
 
 pub(super) fn data_dir() -> Option<PathBuf> {
+    let app_dir: usize = AppleDirType::ApplicationSupport.into();
+
     unsafe {
         let ns_file_manager = class!(NSFileManager);
         let instance: *mut AnyObject = msg_send![ns_file_manager, defaultManager];
-        let directories: *const NSArray<NSObject> = msg_send![instance, URLsForDirectory:AppleDirType::ApplicationSupport inDomains:NS_USER_DOMAIN_MASK];
+        let directories: *const NSArray<NSObject> =
+            msg_send![instance, URLsForDirectory: app_dir, inDomains:NS_USER_DOMAIN_MASK];
         if let Some(obj) = (*directories).firstObject() {
             let str: *const NSString = msg_send![&obj, path];
             if str.is_null() {
