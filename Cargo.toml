@@ -2,7 +2,7 @@
 name = "cache-dir"
 description = "用于Rust的跨平台获取缓存目录和数据目录的函数库"
 categories = ["filesystem", "caching"]
-version = "0.1.8"
+version = "0.1.9"
 edition = "2024"
 keywords = ["cache", "directory", "dir", "ios", "android"]
 license = "MIT"
@@ -20,5 +20,5 @@ features = ["android_app", "android_content"]
 version = "0.4.0"
 
 [target.'cfg(target_os="ios")'.dependencies]
-objc2 = "0.6.0"
-objc2-foundation = "0.3.0"
+objc2 = "0.6.2"
+objc2-foundation = "0.3.1"

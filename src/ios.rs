@@ -1,8 +1,10 @@
-use objc2::{class, msg_send, runtime::AnyObject};
-use objc2_foundation::{NSArray, NSObject, NSString};
-use std::path::PathBuf;
+use {
+    objc2::{class, msg_send, runtime::AnyObject},
+    objc2_foundation::{NSArray, NSObject, NSString},
+    std::path::PathBuf,
+};
 
-const NS_USER_DOMAIN_MASK: c_ulong = 1;
+const NS_USER_DOMAIN_MASK: usize = 1;
 
 #[allow(unused)]
 enum AppleDirType {
@@ -15,7 +17,7 @@ enum AppleDirType {
 }
 
 impl Into<usize> for AppleDirType {
-    fn into(self) -> c_ulong {
+    fn into(self) -> usize {
         match self {
             Self::Library => 5,
             Self::User => 7,
